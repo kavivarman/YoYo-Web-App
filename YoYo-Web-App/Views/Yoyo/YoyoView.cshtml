@@ -1,0 +1,113 @@
+﻿@model YoyoViewModel
+@{
+    ViewBag.Title = "YoYo Test";
+}
+@section styles{
+    <link href="~/lib/custom/css/yoyo.css" asp-append-version="true" rel="stylesheet" />
+}
+
+<br />
+<div class="container">
+    <div class="sticky-top">
+        <div class="row">
+            <div class="col-12 col-sm-12">
+                <button type="button" class="pull-left btn-back"><i class="fa fa-angle-left" aria-hidden="true"></i> <span>Back</span></button>
+                <h1 class="page-title-header text-center">@ViewBag.Title</h1>
+            </div>
+        </div>
+        <div class="div-progress-bar">
+            <div class="row">
+                <div class="col-12 col-sm-4">
+                </div>
+                <div class="col-12 col-sm-4">
+                    <div class="progress-bar">
+                        <div class="progress-bar-value">
+                            <div style="display:none;" class="test-completed">
+                                Test Completed
+                            </div>
+                            <div style="display:none;" class="test-inprogress">
+                                <div id="divLevel"></div>
+                                <div id="divShuttle"></div>
+                                <div id="divSpeed"></div>
+                            </div>
+                            <div class="test-start" onclick="OnStartTest(null);">
+                                <i class="fa fa-play" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <span class="progress-bar-left">
+                            <span id="spnleft" class="div-progress-bar"></span>
+                        </span>
+                        <span class="progress-bar-right">
+                            <span id="spnright" class="div-progress-bar"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-4">
+                </div>
+            </div>
+        </div>
+        <div class="div-test-progress">
+            <div class="row">
+                <div class="col-4 col-sm-4 col-lg-4 text-center border-right">
+                    <h4 class="test-status-tag">NEXT SHUTTLE</h4>
+                    <p class="default-font-color"><span id="spnLeftTime">0:00</span>s</p>
+                </div>
+                <div class="col-4 col-sm-4 col-lg-4 text-center border-right">
+                    <h4 class="test-status-tag">TOTAL TIME</h4>
+                    <p class="default-font-color"><span id="spnTotalTime">0:00</span>m</p>
+                </div>
+                <div class="col-4 col-sm-4 col-lg-4 text-center">
+                    <h4 class="test-status-tag">TOTAL DISTANCE</h4>
+                    <p class="default-font-color"><span id="spnTotalDistance">0</span>m</p>
+                </div>
+            </div>
+        </div>
+        <div class="div-view-result">
+            <br />
+            <div class="row">
+                <div class="col-12 col-sm-12 col-lg-12 text-center">
+                    <button type="button" onclick="GetAthletesResult();" class="badge badge-curve badge-viewresult">View results</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-12 col-lg-12">
+                <h3 class="track-header">Track</h3>
+            </div>
+        </div>
+    </div>
+    <div class="div-table">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-lg-12">
+                <div class="table-responsive-sm">
+                    <table id="tblAthletesInfo" class="table table-sm table-hover">
+                        <tbody>
+                            @{int index = 1;}
+                            @foreach (var athlete in Model.AthleteInfos)
+                            {
+                                <tr>
+                                    <td class="tbl-slno" scope="row"><strong>@index .</strong></td>
+                                    <td class="tbl-name"><strong>@athlete.FullName</strong></td>
+                                    <td class="tbl-warn">
+                                        <button type="button" asp-controller="Yoyo" asp-action="UpdateAthleteStatus" asp-route-id="@athlete.Id" asp-route-actionType="Warned" onclick="OnAthleteWarned(this);" class="badge badge-curve badge-warn">Warn</button>
+                                    </td>
+                                    <td class="tbl-stop" user-id="@athlete.Id">
+                                        <button type="button" asp-controller="Yoyo" asp-action="UpdateAthleteStatus" asp-route-id="@athlete.Id" asp-route-actionType="Completed" onclick="OnAthleteStopped(this);" class="badge badge-curve badge-stop">Stop</button>
+                                        <div class="div-athlete-dropdown">
+                                            @Html.DropDownList("levelShuttle", Model.LevelShuttles, null, new { @onchange = "OnChangelevelShuttle(this)" })
+                                        </div>
+                                    </td>
+                                </tr>
+                                index++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/lib/custom/js/yoyo.js" asp-append-version="true" type="text/javascript"></script>
+}
